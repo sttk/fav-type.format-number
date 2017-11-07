@@ -59,13 +59,14 @@ Creates a number format function which convert a number to a string in the speci
 
 #### Parameters:
 
-| Parameter |  Type  | Description                                      |
-|-----------|:------:|--------------------------------------------------|
-| format    | string | A number format string like following patterns. |
+| Parameter |   Type   | Description                                      |
+|-----------|:--------:|--------------------------------------------------|
+| format    | string   | A number format string as follows.               |
+| rounding  | function | A rounding function. (Optional, and `Math.round` in default.) |
 
-##### Number format patterns
+##### Number format
 
-The regular expression of number format patterns is as follows:
+The regular expression of number format is as follows:
 
 `/^([\+\-]?)(9?)([^0-9]*)(9*)([^0-9]*)(0*)$/`
 
@@ -89,7 +90,6 @@ Following table is a set of examples of number formats:
 | `'+9,999.000'` | `12345.1` => `'+12,345.100'` | `-12345.1 => '-12,345.100'` |
 | `'-9.999,000'` | `12345.1` => `'12.345,100'`  | `-12345.1 => '-12.345,100'` |
 | `'9 999.000'`  | `12345.1` => `'12 345.100'`  | `-12345.1 => '12 345.100'`  |
-
 
 #### Returns:
 
