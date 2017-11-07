@@ -1,6 +1,6 @@
 {
   "name": "@fav/type.format-number",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Convert a number to a string in various number formats.",
   "main": "index.js",
   "files": [
