@@ -9,7 +9,7 @@
     "web/"
   ],
   "scripts": {
-    "lint": "eslint src test",
+    "lint": "eslint .",
     "test": "mocha test test/lib",
     "coverage": "nyc --reporter=lcov --reporter=text-summary npm test",
     "coveralls": "nyc --reporter=text-lcov npm test | coveralls",

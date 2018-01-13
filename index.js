@@ -27,7 +27,7 @@ function formatNumber(format, rounding) {
 
   var formatSign = signFormatter(parsed[1]);
 
-  var formatDecimal, intRounding
+  var formatDecimal, intRounding;
   if (parsed[5]) {
     formatDecimal = decimalFormatter(parsed[5], parsed[6].length, rounding);
     intRounding = toInteger;
