@@ -28,7 +28,7 @@ function formatNumber(format, rounding) {
 
   var formatSign = signFormatter(parsed[1]);
 
-  var formatDecimal, intRounding
+  var formatDecimal, intRounding;
   if (parsed[5]) {
     formatDecimal = decimalFormatter(parsed[5], parsed[6].length, rounding);
     intRounding = toInteger;
@@ -62,7 +62,7 @@ function formatNumber(format, rounding) {
 
 module.exports = formatNumber;
 
-},{"./lib/decimal-formatter":2,"./lib/format-empty":3,"./lib/integer-formatter":4,"./lib/parse-format":5,"./lib/sign-formatter":6,"@fav/type.is-finite-number":9,"@fav/type.is-function":10,"@fav/type.is-string":11,"@fav/type.to-integer":12}],2:[function(require,module,exports){
+},{"./lib/decimal-formatter":2,"./lib/format-empty":3,"./lib/integer-formatter":4,"./lib/parse-format":5,"./lib/sign-formatter":6,"@fav/type.is-finite-number":10,"@fav/type.is-function":11,"@fav/type.is-string":12,"@fav/type.to-integer":13}],2:[function(require,module,exports){
 'use strict';
 
 var padRight = require('@fav/text.pad-right');
@@ -77,7 +77,7 @@ function decimalFormatter(decimalPoint, decimalLen, rounding) {
       return { roundUp: 0, text: decimalPoint + decimalPart };
     }
 
-    if (decimalPart.length == decimalLen) {
+    if (decimalPart.length === decimalLen) {
       return { roundUp: 0, text: decimalPoint + decimalPart };
     }
 
@@ -117,8 +117,6 @@ module.exports = formatEmpty;
 },{}],4:[function(require,module,exports){
 'use strict';
 
-var formatEmpty = require('./format-empty');
-
 function integerFormatter(sep, place, rounding) {
   return function(num, roundUp) {
     var str = String(Math.abs(rounding(num)) + roundUp);
@@ -136,11 +134,11 @@ function integerFormatter(sep, place, rounding) {
 
 module.exports = integerFormatter;
 
-},{"./format-empty":3}],5:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 function parseFormat(format) {
-  var parsed = /^([\+\-]?)(9?)([^0-9]*)(9*)([^0-9]*)(0*)$/.exec(format); 
+  var parsed = /^([\+\-]?)(9?)([^0-9]*)(9*)([^0-9]*)(0*)$/.exec(format);
   if (!parsed) {
     return null;
   }
@@ -195,6 +193,22 @@ module.exports = signFormatter;
 },{"./format-empty":3}],7:[function(require,module,exports){
 'use strict';
 
+var padRight;
+
+/* istanbul ignore if */
+if (!Boolean(String.prototype.padEnd)) {
+  padRight = require('./lib/pad-right');
+} else {
+  padRight = function(source, length, padding) {
+    return source.padEnd(length, padding || ' ');
+  };
+}
+
+module.exports = padRight;
+
+},{"./lib/pad-right":8}],8:[function(require,module,exports){
+'use strict';
+
 var repeat = require('@fav/text.repeat');
 
 function padRight(source, length, padding) {
@@ -215,7 +229,7 @@ function padRight(source, length, padding) {
 
 module.exports = padRight;
 
-},{"@fav/text.repeat":8}],8:[function(require,module,exports){
+},{"@fav/text.repeat":9}],9:[function(require,module,exports){
 'use strict';
 
 function repeat(source, ntimes) {
@@ -226,7 +240,8 @@ function repeat(source, ntimes) {
   var unitlen = source.length;
   var halftime = Math.ceil(ntimes / 2);
 
-  for (var i = 1; i < halftime; i += i) {
+  var i;
+  for (i = 1; i < halftime; i += i) {
     source += source;
   }
 
@@ -235,7 +250,7 @@ function repeat(source, ntimes) {
 
 module.exports = repeat;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 function isFiniteNumber(value) {
@@ -259,7 +274,7 @@ Object.defineProperty(isFiniteNumber, 'not', {
 
 module.exports = isFiniteNumber;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 function isFunction(value) {
@@ -277,7 +292,7 @@ Object.defineProperty(isFunction, 'not', {
 
 module.exports = isFunction;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 function isString(value) {
@@ -301,7 +316,7 @@ Object.defineProperty(isString, 'not', {
 
 module.exports = isString;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var isString = require('@fav/type.is-string');
@@ -325,35 +340,5 @@ function toInteger(value) {
 
 module.exports = toInteger;
 
-},{"@fav/type.is-finite-number":13,"@fav/type.is-string":14}],13:[function(require,module,exports){
-'use strict';
-
-function isFiniteNumber(value) {
-  if (typeof value === 'number') {
-    return isFinite(value);
-  }
-  if (Object.prototype.toString.call(value) === '[object Number]') {
-    return isFinite(value);
-  }
-  return false;
-}
-
-module.exports = isFiniteNumber;
-
-},{}],14:[function(require,module,exports){
-'use strict';
-
-function isString(value) {
-  if (typeof value === 'string') {
-    return true;
-  }
-  if (Object.prototype.toString.call(value) === '[object String]') {
-    return true;
-  }
-  return false;
-}
-
-module.exports = isString;
-
-},{}]},{},[1])(1)
+},{"@fav/type.is-finite-number":10,"@fav/type.is-string":12}]},{},[1])(1)
 });
