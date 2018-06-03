@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g=(g.fav||(g.fav = {}));g=(g.type||(g.type = {}));g.formatNumber = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g=(g.fav||(g.fav = {}));g=(g.type||(g.type = {}));g.formatNumber = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict';
 
 var isString = require('@fav/type.is-string');
@@ -319,13 +319,11 @@ module.exports = isString;
 },{}],13:[function(require,module,exports){
 'use strict';
 
-var isString = require('@fav/type.is-string');
 var isFiniteNumber = require('@fav/type.is-finite-number');
+var toNumber = require('@fav/type.to-number');
 
 function toInteger(value) {
-  if (isString(value)) {
-    value = parseFloat(value);
-  }
+  value = toNumber(value);
 
   if (isFiniteNumber(value)) {
     return value < 0 ? Math.ceil(value) : Math.floor(value);
@@ -340,5 +338,33 @@ function toInteger(value) {
 
 module.exports = toInteger;
 
-},{"@fav/type.is-finite-number":10,"@fav/type.is-string":12}]},{},[1])(1)
+},{"@fav/type.is-finite-number":10,"@fav/type.to-number":14}],14:[function(require,module,exports){
+'use strict';
+
+var isString = require('@fav/type.is-string');
+
+function toNumber(value) {
+  if (typeof value === 'number') {
+    if (value === value) {
+      return value;
+    }
+
+  } else if (isString(value)) {
+    if (value && !/ /.test(value)) {
+      value = Number(value);
+      if (value === value) {
+        return value;
+      }
+    }
+  }
+
+  if (arguments.length > 1) {
+    return arguments[1];
+  }
+  return NaN;
+}
+
+module.exports = toNumber;
+
+},{"@fav/type.is-string":12}]},{},[1])(1)
 });
