@@ -99,6 +99,15 @@ describe('lib/decimal-formatter', function() {
       expect(format(-1.9995)).to.deep.equal({ roundUp: 0, text: '.9995' });
       expect(format(-1.9996)).to.deep.equal({ roundUp: 0, text: '.9996' });
     });
+
+    it('should get correct decimal place when decimal number ia serial of ' +
+    'zero', function() {
+      var format = decimalFormatter('.', 2, Math.round);
+      expect(format(1)).to.deep.equal({ roundUp: 0, text: '.00' });
+      expect(format(0.1)).to.deep.equal({ roundUp: 0, text: '.10' });
+      expect(format(0.01)).to.deep.equal({ roundUp: 0, text: '.01' });
+      expect(format(0.001)).to.deep.equal({ roundUp: 0, text: '.00' });
+    });
   });
 
 });
