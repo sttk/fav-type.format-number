@@ -62,9 +62,10 @@ function formatNumber(format, rounding) {
 
 module.exports = formatNumber;
 
-},{"./lib/decimal-formatter":2,"./lib/format-empty":3,"./lib/integer-formatter":4,"./lib/parse-format":5,"./lib/sign-formatter":6,"@fav/type.is-finite-number":10,"@fav/type.is-function":11,"@fav/type.is-string":12,"@fav/type.to-integer":13}],2:[function(require,module,exports){
+},{"./lib/decimal-formatter":2,"./lib/format-empty":3,"./lib/integer-formatter":4,"./lib/parse-format":5,"./lib/sign-formatter":6,"@fav/type.is-finite-number":12,"@fav/type.is-function":13,"@fav/type.is-string":14,"@fav/type.to-integer":15}],2:[function(require,module,exports){
 'use strict';
 
+var padLeft = require('@fav/text.pad-left');
 var padRight = require('@fav/text.pad-right');
 
 function decimalFormatter(decimalPoint, decimalLen, rounding) {
@@ -98,6 +99,10 @@ function decimalFormatter(decimalPoint, decimalLen, rounding) {
       return { roundUp: 1, text: decimalPoint + s.slice(-decimalLen) };
     }
 
+    if (s.length < decimalLen) {
+      s = padLeft(s, decimalLen, '0');
+    }
+
     return { roundUp: 0, text: decimalPoint + s };
   };
 
@@ -105,7 +110,7 @@ function decimalFormatter(decimalPoint, decimalLen, rounding) {
 
 module.exports = decimalFormatter;
 
-},{"@fav/text.pad-right":7}],3:[function(require,module,exports){
+},{"@fav/text.pad-left":7,"@fav/text.pad-right":9}],3:[function(require,module,exports){
 'use strict';
 
 function formatEmpty() {
@@ -193,6 +198,45 @@ module.exports = signFormatter;
 },{"./format-empty":3}],7:[function(require,module,exports){
 'use strict';
 
+var padLeft;
+
+/* istanbul ignore if */
+if (!Boolean(String.prototype.padStart)) {
+  padLeft = require('./lib/pad-left');
+} else {
+  padLeft = function(source, length, padding) {
+    return source.padStart(length, padding || ' ');
+  };
+}
+
+module.exports = padLeft;
+
+},{"./lib/pad-left":8}],8:[function(require,module,exports){
+'use strict';
+
+var repeat = require('@fav/text.repeat');
+
+function padLeft(source, length, padding) {
+  if (!length || length <= source.length) {
+    return source;
+  }
+
+  if (!padding) {
+    padding = ' ';
+  }
+
+  var padsLen = length - source.length;
+  var padsNum = Math.ceil(padsLen / padding.length);
+  var pads = repeat(padding, padsNum).slice(0, padsLen);
+
+  return pads + source;
+}
+
+module.exports = padLeft;
+
+},{"@fav/text.repeat":11}],9:[function(require,module,exports){
+'use strict';
+
 var padRight;
 
 /* istanbul ignore if */
@@ -206,7 +250,7 @@ if (!Boolean(String.prototype.padEnd)) {
 
 module.exports = padRight;
 
-},{"./lib/pad-right":8}],8:[function(require,module,exports){
+},{"./lib/pad-right":10}],10:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -229,28 +273,29 @@ function padRight(source, length, padding) {
 
 module.exports = padRight;
 
-},{"@fav/text.repeat":9}],9:[function(require,module,exports){
+},{"@fav/text.repeat":11}],11:[function(require,module,exports){
 'use strict';
 
 function repeat(source, ntimes) {
+  if (source === '') {
+    return '';
+  }
   if (ntimes < 1) {
     return '';
   }
 
-  var unitlen = source.length;
-  var halftime = Math.ceil(ntimes / 2);
+  var len = source.length * ntimes;
 
-  var i;
-  for (i = 1; i < halftime; i += i) {
+  while (source.length < len) {
     source += source;
   }
 
-  return source + source.slice(0, (ntimes - i) * unitlen);;
+  return source.slice(0, len);
 }
 
 module.exports = repeat;
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 function isFiniteNumber(value) {
@@ -274,7 +319,7 @@ Object.defineProperty(isFiniteNumber, 'not', {
 
 module.exports = isFiniteNumber;
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 function isFunction(value) {
@@ -292,7 +337,7 @@ Object.defineProperty(isFunction, 'not', {
 
 module.exports = isFunction;
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 function isString(value) {
@@ -316,7 +361,7 @@ Object.defineProperty(isString, 'not', {
 
 module.exports = isString;
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 var isFiniteNumber = require('@fav/type.is-finite-number');
@@ -338,7 +383,7 @@ function toInteger(value) {
 
 module.exports = toInteger;
 
-},{"@fav/type.is-finite-number":10,"@fav/type.to-number":14}],14:[function(require,module,exports){
+},{"@fav/type.is-finite-number":12,"@fav/type.to-number":16}],16:[function(require,module,exports){
 'use strict';
 
 var isString = require('@fav/type.is-string');
@@ -366,5 +411,5 @@ function toNumber(value) {
 
 module.exports = toNumber;
 
-},{"@fav/type.is-string":12}]},{},[1])(1)
+},{"@fav/type.is-string":14}]},{},[1])(1)
 });
